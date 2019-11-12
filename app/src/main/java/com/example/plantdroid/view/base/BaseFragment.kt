@@ -1,8 +1,9 @@
-package com.example.plantdroid.base
+package com.example.plantdroid.view.base
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import dagger.android.support.AndroidSupportInjection
@@ -11,6 +12,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel<*>>(layout : 
 
     private var mViewDataBinding: T? = null
     private var mViewModel: V? = null
+    private lateinit var rootActivity : BaseActivity<*,*>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         performDependencyInjection()
@@ -35,4 +37,10 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel<*>>(layout : 
 
     abstract fun getBindingVariable(): Int
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        rootActivity = context as BaseActivity<*, *>
+    }
+
+    protected fun getBaseActivity() = rootActivity
 }

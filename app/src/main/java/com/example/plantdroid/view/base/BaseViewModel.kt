@@ -1,9 +1,9 @@
-package com.example.plantdroid.base
+package com.example.plantdroid.view.base
 
 import androidx.lifecycle.ViewModel
 import java.lang.ref.WeakReference
 
-abstract class BaseViewModel<T> : ViewModel(){
+abstract class BaseViewModel<T : BaseNavigator> : ViewModel(){
     var navigator : WeakReference<T>? = null
 
     fun setNavigator(navigator : T){
