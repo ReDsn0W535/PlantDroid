@@ -1,15 +1,13 @@
-package com.example.plantdroid.dagger2.module.googleModule
+package com.example.plantdroid.dagger2.module.modules
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
+@Deprecated("not used")
 @Module
-class GoogleModule {
-
+class SignInModule {
     @Provides
-    @Singleton
     fun provideGoogleSignInOptions(): GoogleSignInOptions =
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()

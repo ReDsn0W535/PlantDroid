@@ -1,15 +1,23 @@
 package com.example.plantdroid.view.base
 
+import android.app.Activity
+import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentManager
+import com.example.plantdroid.R
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.HasAndroidInjector
+import kotlinx.android.synthetic.main.activity_main.view.*
 
-abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel<*>> : AppCompatActivity(){
-    private var fragmentManager : FragmentManager
+abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel<*>> : AppCompatActivity(), HasAndroidInjector{
+    private var fragmentManager : FragmentManager = supportFragmentManager
     private lateinit var dataBinding : T
     private lateinit var viewModel : V
-
+    open fun getViewDataBinding() = dataBinding
     abstract fun getBindingVariable(): Int
 
     @LayoutRes
@@ -17,12 +25,26 @@ abstract class BaseActivity<T : ViewDataBinding, V : BaseViewModel<*>> : AppComp
 
     abstract fun getViewModel(): V
 
-
-    init {
-        fragmentManager = supportFragmentManager
+    override fun onCreate(savedInstanceState: Bundle?) {
+        performDependencyInjection()
+        super.onCreate(savedInstanceState)
+        performDataBinding()
     }
 
-    public fun addFragment(fragment: BaseFragment<*,*>, tag : String) = fragmentManager.beginTransaction().add(fragment, tag).commit()
-    public fun replaceFragment(fragment: BaseFragment<*,*>, tag : String, id : Int) = fragmentManager.beginTransaction().replace(id, fragment, tag).commit()
+    private fun performDataBinding() {
+        dataBinding = DataBindingUtil.setContentView(this, getLayoutId())
+        this.viewModel = getViewModel()
+        dataBinding.setVariable(getBindingVariable(), viewModel)
+        dataBinding.executePendingBindings()
+    }
+
+    open fun performDependencyInjection() {
+        AndroidInjection.inject(this)
+    }
+
+    public fun addFragment(fragment: BaseFragment<*,*>, tag : String) = fragmentManager
+        .beginTransaction().add(R.id.main_fragment, fragment, tag).commit()
+    public fun replaceFragment(fragment: BaseFragment<*,*>, tag : String) = fragmentManager
+        .beginTransaction().replace(R.id.main_fragment, fragment, tag).commit()
     public fun removeFragment(fragment: BaseFragment<*,*>) = fragmentManager.beginTransaction().remove(fragment).commit()
 }

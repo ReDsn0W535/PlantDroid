@@ -4,24 +4,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.plantdroid.view.sign_in.main_sign_in.data.MainSignInViewModel" />
+            type="com.example.plantdroid.view.sign_in.sign_in.data.SignInViewModel" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="CREATE ACCOUNT" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SIGN IN" />
 
     </LinearLayout>
 </layout>
